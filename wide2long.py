@@ -54,7 +54,7 @@ def get_args() -> Args:
     parser.add_argument('-D',
                         '--drop',
                         help='Drop fields',
-                        metavar='crop',
+                        metavar='drop',
                         nargs='*',
                         type=str)
 
@@ -80,7 +80,6 @@ def main() -> None:
     """ Make a jazz noise here """
 
     args = get_args()
-
     reader = csv.DictReader(args.file, delimiter=args.delimiter)
     fields = reader.fieldnames
     anchors = args.anchor_fields or [fields[0]]
@@ -93,7 +92,9 @@ def main() -> None:
     skip = anchors + (args.drop_fields or [])
     var_cols = [f for f in fields if f not in skip]
 
-    writer = csv.DictWriter(open(args.out_file, 'wt'), fieldnames=out_flds)
+    writer = csv.DictWriter(open(args.out_file, 'wt'),
+                            fieldnames=out_flds,
+                            delimiter=args.delimiter)
     writer.writeheader()
 
     num_written = 0
